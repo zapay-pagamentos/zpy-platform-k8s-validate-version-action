@@ -1,0 +1,60 @@
+name: 'Validate Version'
+description: 'Validate version'
+inputs:
+  python-version:
+    description: 'Python version'
+    required: true
+  pypi-user:
+    description: 'PyPi user'
+    required: true
+  python-password:
+    description: 'PyPi password'
+    required: true
+outputs:
+  imageTag: 
+    description: "Image TAG"
+    value: ${{ steps.validate_pr.outputs.image-tag }}
+runs:
+  using: "composite"
+  steps:
+    - name: Check out the repo
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Prepare Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.9'
+
+    - name: Cache pip
+      uses: actions/cache@v3
+      with:
+        path: /opt/hostedtoolcache/Python/${{ inputs.python-version }}/x64/
+        key: python${{ inputs.python-version }}-${{ runner.os }}-requirements-${{ hashFiles('requirements.txt') }}
+
+    - name: Install Poetry
+      env:
+        PYPI_USER: ${{ inputs.pypi-user }}
+        PYPI_PASSWORD: ${{ inputs.pypi-password }}
+      shell: bash
+      run: |
+        pip install poetry
+        poetry config http-basic.zapay-pypi $PYPI_USER $PYPI_PASSWORD
+    - name: Validate pull request name
+      id: validate_pr
+      env:
+        release_name: ${{ github.event.pull_request.title }}
+      shell: bash
+      run: |
+        package_version=$(git tag --list --sort=-version:refname | head -n 1)
+        poetry version $package_version
+        new_version_name=$(echo $release_name | grep -oP "^((M|m){1}ajor)|((M|m){1}inor)|((P|p){1}atch)" | tr '[:upper:]' '[:lower:]')
+        if [ ! -z "$new_version_name" ]; then
+          poetry version $new_version_name
+          new_version=$(poetry version -s)
+          echo "::set-output name=image-tag::$new_version"
+        else
+            echo "Título do pull request deve iniciar com Major, Minor ou Patch" >&2
+            exit 1
+        fi
