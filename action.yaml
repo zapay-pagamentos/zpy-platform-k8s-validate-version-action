@@ -7,7 +7,7 @@ inputs:
   pypi-user:
     description: 'PyPi user'
     required: true
-  python-password:
+  pypi-password:
     description: 'PyPi password'
     required: true
 outputs:
