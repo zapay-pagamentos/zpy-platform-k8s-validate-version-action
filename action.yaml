@@ -21,18 +21,15 @@ runs:
       uses: actions/checkout@v2
       with:
         fetch-depth: 0
-
     - name: Prepare Python
       uses: actions/setup-python@v3
       with:
         python-version: '3.9'
-
     - name: Cache pip
       uses: actions/cache@v3
       with:
         path: /opt/hostedtoolcache/Python/${{ inputs.python-version }}/x64/
         key: python${{ inputs.python-version }}-${{ runner.os }}-requirements-${{ hashFiles('requirements.txt') }}
-
     - name: Install Poetry
       env:
         PYPI_USER: ${{ inputs.pypi-user }}
