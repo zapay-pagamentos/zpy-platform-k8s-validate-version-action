@@ -50,7 +50,7 @@ runs:
         if [ ! -z "$new_version_name" ]; then
           poetry version $new_version_name
           new_version=$(poetry version -s)
-          echo "::set-output name=image-tag::$new_version"
+          echo "::set-output name=image-tag::${{ github.head_ref }}"
         else
             echo "Título do pull request deve finalizar com (Major), (Minor) ou (Patch)" >&2
             exit 1
