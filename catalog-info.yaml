@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: zpy-platform-k8s-validate-version-action
+  description: Github Action to validate version
+  annotations:
+    github.com/project-slug: zapay-pagamentos/zpy-platform-k8s-validate-version-action
+spec:
+  type: library
+  lifecycle: production
+  owner: darrell
