@@ -14,6 +14,9 @@ outputs:
   imageTag: 
     description: "Image TAG"
     value: ${{ steps.validate_pr.outputs.image-tag }}
+  versionCandidate:
+    description: "New Semantic Version"
+    value: ${{ steps.validate_pr.outputs.new-version }}
 runs:
   using: "composite"
   steps:
@@ -53,6 +56,7 @@ runs:
           branch_name=${{ github.head_ref }}
           image_tag=$(echo $branch_name | sed 's/\//_/g')
           echo "::set-output name=image-tag::$image_tag"
+          echo "::set-output name=new-version::$new_version"
         else
             echo "Título do pull request deve finalizar com (Major), (Minor) ou (Patch)" >&2
             exit 1
