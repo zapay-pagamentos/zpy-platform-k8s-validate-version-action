@@ -48,7 +48,7 @@ runs:
       shell: bash
       run: |
         check_package_version=$(git tag --list --sort=-version:refname | head -n 1)
-        if [ $package_version = "staging" ]; then 
+        if [ $check_package_version = "staging" ]; then 
           package_version=$(git tag --list --sort=-version:refname | head -n 2) 
         else
           package_version=$(git tag --list --sort=-version:refname | head -n 1)
