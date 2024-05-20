@@ -47,4 +47,5 @@ runs:
         release_name: ${{ github.event.pull_request.title }}
       shell: bash
       run: |
-        echo "ola"
+        git --version
+        git tag --list
