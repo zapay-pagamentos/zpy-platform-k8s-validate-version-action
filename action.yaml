@@ -48,4 +48,4 @@ runs:
       shell: bash
       run: |
         git --version
-        git tag --list --sort=-version:refname
+        git tag --list --sort=-version:refname | sed -n 1p
