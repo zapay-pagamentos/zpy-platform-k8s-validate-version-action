@@ -48,10 +48,13 @@ runs:
       shell: bash
       run: |
         check_package_version=$(git tag --list --sort=-version:refname | head -n 1)
+        echo "ola"
         if [ $check_package_version = "staging" ]; then 
           package_version=$(git tag --list --sort=-version:refname | sed -n 2p) 
+          echo "ole"
         else
           package_version=$(git tag --list --sort=-version:refname | head -n 1)
+          echo "olo"
         fi
         echo "package version -> $package_version"
         poetry version $package_version
