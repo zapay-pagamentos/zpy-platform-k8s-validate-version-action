@@ -48,4 +48,4 @@ runs:
       shell: bash
       run: |
         git --version
-        git tag --list
+        git tag --list | head -n 1
