@@ -47,11 +47,11 @@ runs:
         release_name: ${{ github.event.pull_request.title }}
       shell: bash
       run: |
-        check_package_version=$(git tag --list --sort=-version:refname | head -n 1)
+        check_package_version=$(git tag --list --sort=-version:refname | sed -n 1p)
         if [ $check_package_version = "staging" ]; then 
           package_version=$(git tag --list --sort=-version:refname | sed -n 2p) 
         else
-          package_version=$(git tag --list --sort=-version:refname | head -n 1)
+          package_version=$(git tag --list --sort=-version:refname | sed -n 1p)
         fi
         echo "package version -> $package_version"
         poetry version $package_version
