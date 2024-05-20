@@ -47,5 +47,4 @@ runs:
         release_name: ${{ github.event.pull_request.title }}
       shell: bash
       run: |
-        package_version=$(git tag --list --sort=-version:refname | head -n 1)
-        poetry version $package_version
+        echo "ola"
