@@ -21,7 +21,7 @@ runs:
   using: "composite"
   steps:
     - name: Check out the repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         fetch-depth: 0
     - name: Prepare Python
@@ -61,8 +61,8 @@ runs:
           new_version=$(poetry version -s)
           branch_name=${{ github.head_ref }}
           image_tag=$(echo $branch_name | sed 's/\//_/g')
-          echo "::set-output name=image-tag::$image_tag"
-          echo "::set-output name=new-version::$new_version"
+          echo "image-tag=$image_tag" >> $GITHUB_OUTPUT
+          echo "new-version=$new_version" >> $GITHUB_OUTPUT
         else
             echo "Título do pull request deve finalizar com (Major), (Minor) ou (Patch)" >&2
             exit 1
