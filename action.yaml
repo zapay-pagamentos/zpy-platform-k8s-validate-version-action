@@ -57,8 +57,40 @@ runs:
         poetry version $package_version
         new_version_name=$(echo $release_name | grep -oP "((M|m){1}ajor)|((M|m){1}inor)|((P|p){1}atch)" | tr '[:upper:]' '[:lower:]')
         if [ ! -z "$new_version_name" ]; then
-          poetry version $new_version_name
-          new_version=$(poetry version -s)
+          VERSION=$package_version
+          # Divida a versão em partes
+          IFS='.' read -r -a VERSION_PARTS <<< "$VERSION"
+          
+          MAJOR=${VERSION_PARTS[0]}
+          MINOR=${VERSION_PARTS[1]}
+          PATCH=${VERSION_PARTS[2]}
+          
+          # Verifique qual parte incrementar
+          case "$1" in
+            patch)
+              PATCH=$((PATCH + 1))
+              ;;
+            minor)
+              MINOR=$((MINOR + 1))
+              PATCH=0
+              ;;
+            major)
+              MAJOR=$((MAJOR + 1))
+              MINOR=0
+              PATCH=0
+              ;;
+            *)
+              echo "Tipo desconhecido: $1"
+              exit 1
+              ;;
+          esac
+          
+          # Monte a nova versão
+          NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+          
+          # Atualize o arquivo de versão ou crie um novo commit
+          echo "$NEW_VERSION" > VERSION
+          new_version=$NEW_VERSION
           branch_name=${{ github.head_ref }}
           image_tag=$(echo $branch_name | sed 's/\//_/g')
           echo "image-tag=$image_tag" >> $GITHUB_OUTPUT
