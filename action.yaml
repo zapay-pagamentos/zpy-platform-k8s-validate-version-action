@@ -31,6 +31,7 @@ runs:
         if [ "$package_version" = "" ]; then
           package_version=0.0.1
         fi
+        echo "Nome da release: $release_name"
         new_version_name=$(echo $release_name | grep -oP "((M|m){1}ajor)|((M|m){1}inor)|((P|p){1}atch)" | tr '[:upper:]' '[:lower:]')
         echo "Old version: $package_version"
         echo "Type of version: $new_version_name"
