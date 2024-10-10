@@ -21,6 +21,7 @@ runs:
       shell: bash
       run: |
         check_package_version=$(git tag --list --sort=-version:refname | head -n 1)
+        echo "Checker: $check_package_version"
         if [ $check_package_version = "staging" ]; then 
           package_version=$(git tag --list --sort=-version:refname | sed -n 2p) 
         else
