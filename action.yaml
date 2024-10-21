@@ -27,6 +27,11 @@ runs:
         else
           package_version=$(git tag --list --sort=-version:refname | head -n 1)
         fi
+        if [ $check_package_version = "staging-deploy" ]; then 
+          package_version=$(git tag --list --sort=-version:refname | sed -n 2p) 
+        else
+          package_version=$(git tag --list --sort=-version:refname | head -n 1)
+        fi
         echo "Verificando se existe tag"
         if [ "$package_version" = "" ]; then
           package_version=0.0.1
